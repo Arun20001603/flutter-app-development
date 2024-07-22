@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:robot_app/mvc/models/registerUser_model.dart';
-import 'package:robot_app/services/registerservice.dart';
+import 'package:robot_app/services/registerService.dart';
 import 'otp_page.dart';
 import 'password_page.dart';
 
@@ -29,19 +29,28 @@ class _LoginPageState extends State<LoginPage> {
       RegisterService registerService = RegisterService();
       RegisterUser user = RegisterUser(email: _emailController.text);
       try {
-        var response = await registerService.register(user);
-        if (response['isFirstTime']) {
+        final object = await registerService.register(user);
+        bool status = object['isFirstTime'];
+
+        if (status == true) {
           Navigator.push(
             context,
             MaterialPageRoute(
                 builder: (context) => OTPPage(email: _emailController.text)),
           );
-        } else {
+        } else if (status == false) {
           Navigator.push(
             context,
             MaterialPageRoute(
                 builder: (context) =>
                     PasswordPage(email: _emailController.text)),
+          );
+          print('already registered');
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Invalid emailId'),
+            ),
           );
         }
       } catch (e) {

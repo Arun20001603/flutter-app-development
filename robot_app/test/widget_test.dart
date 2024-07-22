@@ -11,20 +11,32 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:robot_app/main.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
+  testWidgets('Check if the app displays a specific widget',
+      (WidgetTester tester) async {
     // Build our app and trigger a frame.
     await tester.pumpWidget(const MyApp());
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    // Verify if a specific widget is present in the widget tree.
+    expect(find.byType(Text),
+        findsWidgets); // Adjust according to the widget you're checking for
+  });
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
+  testWidgets('Check if the app updates text after button click',
+      (WidgetTester tester) async {
+    // Build our app and trigger a frame.
+    await tester.pumpWidget(const MyApp());
+
+    // Verify the initial state of a specific text widget.
+    expect(find.text('Initial Text'),
+        findsOneWidget); // Adjust according to your app
+
+    // Simulate a user interaction that changes the text.
+    await tester.tap(
+        find.byType(ElevatedButton)); // Adjust according to the widget type
     await tester.pump();
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    // Verify the updated text.
+    expect(find.text('Updated Text'),
+        findsOneWidget); // Adjust according to your app
   });
 }
